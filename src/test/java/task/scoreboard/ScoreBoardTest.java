@@ -61,5 +61,59 @@ class ScoreBoardTest {
             assertEquals(TEAM_ALREADY_PLAYING, exception.getMessage());
         }
     }
+
+    @Nested
+    class MatchLifecycleTests {
+        @Test
+        void shouldSetScoreCorrectly() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            scoreboard.startMatch(MEXICO, CANADA);
+            scoreboard.updateScore(MEXICO, CANADA, 2, 3);
+            assertEquals(2, scoreboard.getSummary().get(0).getHomeTeamScore());
+            assertEquals(3, scoreboard.getSummary().get(0).getAwayTeamScore());
+        }
+
+        @Test
+        void shouldFinishMatch() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            scoreboard.startMatch(SPAIN, CANADA);
+            scoreboard.finishMatch(SPAIN, CANADA);
+            assertEquals(0, scoreboard.getSummary().size());
+        }
+
+        @Test
+        void shouldThrowWhenFinishingNonExistentMatch() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                    () -> scoreboard.finishMatch(SPAIN, MEXICO));
+            assertEquals(MATCH_NOT_FOUND, exception.getMessage());
+        }
+
+        @Test
+        void shouldThrowWhenUpdatingScoreOfNonExistentMatch() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                    () -> scoreboard.updateScore(MEXICO, SPAIN, 1, 0));
+            assertEquals(MATCH_NOT_FOUND, exception.getMessage());
+        }
+
+        @Test
+        void shouldAllowScoreUpdateWithoutChange() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            scoreboard.startMatch(MEXICO, BRAZIL);
+            scoreboard.updateScore(MEXICO, BRAZIL, 0, 0);
+            assertEquals(0, scoreboard.getSummary().get(0).getHomeTeamScore());
+            assertEquals(0, scoreboard.getSummary().get(0).getAwayTeamScore());
+        }
+
+        @Test
+        void shouldHandleMaxIntScores() {
+            ScoreBoard scoreboard = new ScoreBoard();
+            scoreboard.startMatch(MEXICO, BRAZIL);
+            scoreboard.updateScore(MEXICO, BRAZIL, Integer.MAX_VALUE, Integer.MAX_VALUE);
+            assertEquals(Integer.MAX_VALUE, scoreboard.getSummary().get(0).getHomeTeamScore());
+            assertEquals(Integer.MAX_VALUE, scoreboard.getSummary().get(0).getAwayTeamScore());
+        }
+    }
 }
 
