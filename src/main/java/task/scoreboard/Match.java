@@ -1,11 +1,12 @@
 package task.scoreboard;
 
-import static task.scoreboard.ErrorMessage.INVALID_TEAM_NAME;
-import static task.scoreboard.ErrorMessage.SAME_TEAM_MATCH;
+import static task.scoreboard.ErrorMessage.*;
 
 public class Match {
     private final String homeTeam;
     private final String awayTeam;
+    private int homeTeamScore;
+    private int awayTeamScore;
 
     public Match(String homeTeam, String awayTeam) {
         if (homeTeam == null || homeTeam.isBlank() || awayTeam == null || awayTeam.isBlank()) {
@@ -24,5 +25,21 @@ public class Match {
 
     public String getHomeTeam() {
         return homeTeam;
+    }
+
+    public int getAwayTeamScore() {
+        return awayTeamScore;
+    }
+
+    public int getHomeTeamScore() {
+        return homeTeamScore;
+    }
+
+    public void setScore(int homeTeamScore, int awayTeamScore) {
+        if (homeTeamScore < 0 || awayTeamScore < 0) {
+            throw new IllegalArgumentException(INVALID_SCORE);
+        }
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
     }
 }
