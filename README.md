@@ -89,3 +89,6 @@ While the current version of the scoreboard meets the core requirements, there a
 
 - **More flexible sorting**  
   Allow optional sorting by kickoff time, alphabetical order, or filtered by team.
+
+- **Note on Branching**  
+  For the purpose of this individual task, all commits have been pushed directly to the `main` branch to keep the workflow simple and linear. In a production or team environment, proper branching strategies (e.g., feature branches, pull requests, code review) should be followed.
