@@ -1,5 +1,7 @@
 package task.scoreboard;
 
+import java.time.Instant;
+
 import static task.scoreboard.ErrorMessage.*;
 
 public class Match {
@@ -7,8 +9,13 @@ public class Match {
     private final String awayTeam;
     private int homeTeamScore;
     private int awayTeamScore;
+    private final Instant startTime;
 
     public Match(String homeTeam, String awayTeam) {
+        this(homeTeam, awayTeam, Instant.now());
+    }
+
+    public Match(String homeTeam, String awayTeam, Instant startTime) {
         if (homeTeam == null || homeTeam.isBlank() || awayTeam == null || awayTeam.isBlank()) {
             throw new IllegalArgumentException(INVALID_TEAM_NAME);
         }
@@ -17,6 +24,7 @@ public class Match {
         }
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
+        this.startTime = startTime;
     }
 
     public String getAwayTeam() {
@@ -41,5 +49,18 @@ public class Match {
         }
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public int getTotalScore() {
+        return homeTeamScore + awayTeamScore;
+    }
+
+    @Override
+    public String toString() {
+        return homeTeam + " " + homeTeamScore + " - " + awayTeamScore + " " + awayTeam;
     }
 }

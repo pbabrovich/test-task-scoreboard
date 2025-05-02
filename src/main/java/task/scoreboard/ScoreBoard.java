@@ -1,8 +1,10 @@
 package task.scoreboard;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static task.scoreboard.ErrorMessage.MATCH_NOT_FOUND;
 import static task.scoreboard.ErrorMessage.TEAM_ALREADY_PLAYING;
@@ -11,7 +13,11 @@ public class ScoreBoard {
     Map<MatchKey, Match> matches = new HashMap<>();
 
     public List<Match> getSummary() {
-        return matches.values().stream().toList();
+        return matches.values().stream()
+                .sorted(Comparator
+                        .comparingInt(Match::getTotalScore).reversed()
+                        .thenComparing(Comparator.comparing(Match::getStartTime).reversed()))
+                .collect(Collectors.toList());
     }
 
     public void startMatch(String homeTeam, String awayTeam) {
